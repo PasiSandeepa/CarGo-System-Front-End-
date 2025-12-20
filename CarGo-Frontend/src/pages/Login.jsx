@@ -34,11 +34,11 @@ function Login() {
     try {
         const res = await axios.post('http://localhost:8080/api/v1/customer/login', loginData);
         
-        console.log("Full Backend Response:", res.data); // මෙතැන බලන්න id එක එන්නේ කොතැනද කියා
+        console.log("Full Backend Response:", res.data); 
 
         if (res.status === 200) {
-            // වැදගත්: Backend එකෙන් එන 'res.data' එකේ 'id' එක කෙලින්ම තිබේදැයි බලන්න.
-            // සමහරවිට එය res.data.id හෝ res.data.customerId විය හැක.
+         
+           
             
             localStorage.setItem('user', JSON.stringify(res.data));
             
@@ -48,7 +48,7 @@ function Login() {
                 timer: 1500,
                 showConfirmButton: false 
             }).then(() => {
-                navigate('/dashboard');
+                navigate('/Home');
             });
         }
     } catch (err) {

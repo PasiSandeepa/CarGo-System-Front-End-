@@ -54,7 +54,7 @@ function Home() {
               />
               <div className="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
                 <h2>{car.brand} {car.model}</h2>
-                <p>Luxury Car available for rent.</p>
+                <p>Luxury Car available for Rent.</p>
               </div>
             </div>
           ))}

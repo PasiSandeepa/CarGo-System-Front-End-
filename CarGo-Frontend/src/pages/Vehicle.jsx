@@ -60,7 +60,7 @@ const handleRentClick = (car) => {
     cancelButtonText: 'Cancel'
   }).then((result) => {
     if (result.isConfirmed) {
-      navigate('/booking', { state: { carData: car } });
+      navigate('/Booking', { state: { carData: car } });
     }
   });
 };
@@ -75,7 +75,7 @@ const handleRentClick = (car) => {
         </h2>
         <div className="row">
           {carList.map((car) => {
-            // Availability එක පරීක්ෂා කිරීම (Database එකේ 1 හෝ 0 ලෙස තිබිය හැක)
+    
             const isAvailable = car.available === true || car.available === 1;
 
             return (
@@ -121,7 +121,7 @@ const handleRentClick = (car) => {
                       )}
                     </div>
 
-                    {/* මෙහිදී Button එකේ පැහැය සහ text එක වෙනස් වේ */}
+                  
                     <button
                       className={`btn w-100 fw-bold py-2 shadow-sm rounded-2 ${isAvailable ? 'btn-primary' : 'btn-secondary'}`}
                       onClick={() => handleRentClick(car)}

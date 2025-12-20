@@ -21,11 +21,10 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          
+
           <Route path="/vehicles" element={<Vehicle />} />
-          {/* මෙතන '/bookings' තිබුණ එක '/booking' කළා */}
+
           <Route path="/booking" element={<Booking />} />
-          
           <Route path="/about" element={<div className="container mt-5"><h2>About Us</h2></div>} />
           <Route path="/dashboard" element={<div className="container mt-5"><h2>Welcome Dashboard</h2></div>} />
         </Routes>

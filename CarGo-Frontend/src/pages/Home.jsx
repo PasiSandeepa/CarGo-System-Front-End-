@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function Home() {
   const [cars, setCars] = useState([]);

@@ -1,87 +1,90 @@
-import React from "react";
-import { FaFacebookF, FaInstagram, FaWhatsapp, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
+import React, { useState, useEffect } from "react"; // 1. useEffect එකතු කළා
+import { Link, useLocation, useNavigate } from "react-router-dom"; // 2. useNavigate එකතු කළා
+import logo from "../assets/1.webp";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
+function Navbar({ notifications }) {
+    const [userLoggedIn, setUserLoggedIn] = useState(false);
+    const location = useLocation();
+    const navigate = useNavigate();
 
 
+    useEffect(() => {
+        const user = localStorage.getItem('user');
+        if (user) {
+            setUserLoggedIn(true);
+        } else {
+            setUserLoggedIn(false);
+        }
+    }, [location]);
 
-function Footer() {
+
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        setUserLoggedIn(false);
+        navigate('/login');
+    };
+
+    const links = [
+        { name: "Home", path: "/" },
+        { name: "Vehicles", path: "/vehicles" },
+        { name: "Bookings", path: "/bookings" },
+        { name: "Customers", path: "/customers" },
+        { name: "About", path: "/about" },
+        { name: "Payment", path: "/payment" }
+    ];
+
     return (
-        <footer className="bg-dark text-white pt-5 pb-3 w-100 mt-auto shadow-lg border-top border-secondary">
-            <div className="container-fluid px-lg-5">
-                <div className="row g-4">
-                  
-                    <div className="col-lg-4 col-md-6">
-                        <h3 className="fw-bold text-info mb-3">CarGo</h3>
-                        <p className="text-white small pe-lg-5 opacity-75">
-                            Sri Lanka's leading vehicle rental service. You can reliably get any luxury or standard vehicle you need from us.
-                        </p>
-                        <div className="d-flex gap-2 mt-3">
-                            <a href="#" className="btn btn-outline-light btn-sm rounded-circle"><FaFacebookF /></a>
-                            <a href="#" className="btn btn-outline-light btn-sm rounded-circle"><FaInstagram /></a>
-                            <a href="#" className="btn btn-outline-light btn-sm rounded-circle"><FaWhatsapp /></a>
-                        </div>
-                    </div>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow py-1 fixed-top">
+            <div className="container d-flex align-items-center">
+                <Link className="navbar-brand fw-bold d-flex align-items-center" to="/">
+                    <img src={logo} alt="logo" width="60" height="60" className="rounded me-3 shadow-sm" />
+                    <span className="h3 text-info mb-0" style={{ fontWeight: '700' }}>CarGo</span>
+                </Link>
 
-                    <div className="col-lg-2 col-md-6">
-                        <h6 className="text-uppercase fw-bold mb-3 text-white">Quick Links</h6>
-                        <ul className="list-unstyled small">
-                            <li className="mb-2">
-                                <a href="/home" className="text-white opacity-75 text-decoration-none hover-opacity-100">Home</a>
-                            </li>
-                            <li className="mb-2">
-                                <a href="/vehicles" className="text-white opacity-75 text-decoration-none hover-opacity-100">Vehicles</a>
-                            </li>
-                            <li className="mb-2">
-                                <a href="/bookings" className="text-white opacity-75 text-decoration-none hover-opacity-100">My Bookings</a>
-                            </li>
-                            <li className="mb-2">
-                                <a href="/about" className="text-white opacity-75 text-decoration-none hover-opacity-100">About Us</a>
-                            </li>
-                        </ul>
-                    </div>
-                
-                    <div className="col-lg-3 col-md-6">
-                  
-                        <h6 className="text-uppercase fw-bold mb-3 text-white">Contact Us</h6>
+                <button className="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
 
-              
-                        <ul className="list-unstyled small text-white">
-                            <li className="mb-2 opacity-75">
-                                <FaMapMarkerAlt className="me-2 text-primary" /> No. 123, Galle Road, Colombo 03.
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul className="navbar-nav me-auto mb-3 mb-lg-0 fw-bold">
+                        {links.map((link) => (
+                            <li className="nav-item" key={link.name}>
+                                <Link to={link.path} className={`nav-link fw-bold px-3 ${location.pathname === link.path ? "text-warning" : "text-white"}`}>
+                                    {link.name}
+                                </Link>
                             </li>
-                            <li className="mb-2 opacity-75">
-                                <FaPhoneAlt className="me-2 text-primary" /> +94 112 345 678
-                            </li>
-                            <li className="mb-2 opacity-75">
-                                <FaEnvelope className="me-2 text-primary" /> info@cargo.lk
-                            </li>
-                        </ul>
-                    </div>
+                        ))}
 
 
-                </div>
+                        {userLoggedIn && (
+                            <li className="nav-item ms-lg-3">
+                                <Link className="btn btn-warning fw-bold px-3 shadow-sm" to="/add-car">+ ADD CAR</Link>
+                            </li>
+                        )}
+                    </ul>
 
-                <hr className="bg-secondary mt-5 mb-4 opacity-25" />
-                <div className="row align-items-center">
-                    <div className="col-md-6 text-center text-md-start">
-                
-                        <p className="mb-0 text-white opacity-100 small">
-                            © 2025 CarGo Rentals. All Rights Reserved.
-                        </p>
-                    </div>
-                    <div className="col-md-6 text-center text-md-end mt-2 mt-md-0">
-                   
-                        <a href="#" className="text-white text-decoration-none small me-3 opacity-75 hover-opacity-100">
-                            Privacy Policy
-                        </a>
-                        <a href="#" className="text-white text-decoration-none small opacity-75 hover-opacity-100">
-                            Terms of Service
-                        </a>
+                    <div className="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+                        {!userLoggedIn ? (
+                            <>
+                                <Link to="/login" className="btn btn-outline-info fw-bold">Login</Link>
+                                <Link to="/register" className="btn btn-warning fw-bold">Register</Link>
+                            </>
+                        ) : (
+                            <>
+                                <Link to="/my-bookings" className="btn btn-outline-warning fw-bold text-white me-2">
+                                    <i className="bi bi-calendar-check me-1"></i> My Bookings
+                                </Link>
+                                <button className="btn btn-secondary fw-bold text-white">My Profile</button>
+                                <button className="btn btn-outline-danger fw-bold" onClick={handleLogout}>Logout</button>
+                            </>
+                        )}
                     </div>
                 </div>
-
             </div>
-        </footer>
+        </nav>
     );
 }
 
-export default Footer;
+export default Navbar;

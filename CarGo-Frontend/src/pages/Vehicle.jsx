@@ -27,23 +27,43 @@ function Vehicle() {
     !['sedan', 'van', 'suv', 'electric suv', 'hatchback'].includes(car.type?.toLowerCase())
   );
 
-  const handleRentClick = (car) => {
+const handleRentClick = (car) => {
+  const user = localStorage.getItem('user');
+
+  if (!user) {
     Swal.fire({
-      title: `Rent this ${car.model}?`,
-      text: `Daily Price: LKR ${car.pricePerDay.toLocaleString()}`,
-      imageUrl: car.imageUrl ? `http://localhost:8080/api/v1/cars/image-proxy?url=${encodeURIComponent(car.imageUrl)}` : 'https://placehold.co/400x200',
-      imageWidth: 600,
-      imageHeight: 400,
+      title: 'Login Required',
+      text: 'To reserve a vehicle, please log in first.!',
+      icon: 'info',
       showCancelButton: true,
-      confirmButtonText: 'Book Now',
       confirmButtonColor: '#0d6efd',
-      cancelButtonText: 'Cancel'
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Login ',
+      cancelButtonText: 'See you later.'
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate('/booking', { state: { carData: car } });
+        navigate('/login'); 
       }
     });
-  };
+    return; 
+  }
+
+  Swal.fire({
+    title: `Rent this ${car.model}?`,
+    text: `Daily Price: LKR ${car.pricePerDay.toLocaleString()}`,
+    imageUrl: car.imageUrl ? `http://localhost:8080/api/v1/cars/image-proxy?url=${encodeURIComponent(car.imageUrl)}` : 'https://placehold.co/400x200',
+    imageWidth: 600,
+    imageHeight: 400,
+    showCancelButton: true,
+    confirmButtonText: 'Book Now',
+    confirmButtonColor: '#0d6efd',
+    cancelButtonText: 'Cancel'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      navigate('/booking', { state: { carData: car } });
+    }
+  });
+};
 
   const renderCarList = (carList, title) => {
     if (carList.length === 0) return null;
@@ -54,65 +74,71 @@ function Vehicle() {
           {title}
         </h2>
         <div className="row">
-          {carList.map((car) => (
-            <div key={car.carid} className="col-lg-3 col-md-6 col-sm-6 mb-4">
-              <div className="card h-100 shadow-sm border border-danger border-2 d-flex flex-column pb-3">
-                <img
-                  src={car.imageUrl ? `http://localhost:8080/api/v1/cars/image-proxy?url=${encodeURIComponent(car.imageUrl)}` : "https://placehold.co/400x200?text=No+Image"}
-                  onError={(e) => { e.target.src = "https://placehold.co/400x200?text=Load+Error"; }}
-                  alt={car.model}
-                  className="card-img-top"
-                  style={{ width: '100%', height: '180px', objectFit: 'cover' }}
-                />
+          {carList.map((car) => {
+            // Availability එක පරීක්ෂා කිරීම (Database එකේ 1 හෝ 0 ලෙස තිබිය හැක)
+            const isAvailable = car.available === true || car.available === 1;
 
-                <div className="p-3 pb-2 text-center">
-                  <h5 className="fw-bold text-uppercase" style={{ fontSize: '1rem' }}>{car.brand} {car.model}</h5>
-                </div>
+            return (
+              <div key={car.carid} className="col-lg-3 col-md-6 col-sm-6 mb-4">
+                <div className="card h-100 shadow-sm border border-danger border-2 d-flex flex-column pb-3">
+                  <img
+                    src={car.imageUrl ? `http://localhost:8080/api/v1/cars/image-proxy?url=${encodeURIComponent(car.imageUrl)}` : "https://placehold.co/400x200?text=No+Image"}
+                    onError={(e) => { e.target.src = "https://placehold.co/400x200?text=Load+Error"; }}
+                    alt={car.model}
+                    className="card-img-top"
+                    style={{ width: '100%', height: '180px', objectFit: 'cover' }}
+                  />
 
-                <div className="row g-0 mb-3 align-items-center px-2" style={{ fontSize: '0.85rem' }}>
-                  <div className="col-6 border-end text-center">
-                    <span className="text-muted d-block small text-uppercase" style={{ fontSize: '0.6rem' }}>Daily Price</span>
-                    <strong className="text-primary">LKR {car.pricePerDay.toLocaleString()}</strong>
-                  </div>
-                  <div className="col-6 text-center">
-                    <span className="text-muted d-block small text-uppercase" style={{ fontSize: '0.6rem' }}>Location</span>
-                    <strong className="text-dark text-truncate d-block px-1" title={car.pickupAddress}>
-                      {car.pickupAddress || 'N/A'}
-                    </strong>
-                  </div>
-                </div>
-
-
-                <div className="mt-auto px-3">
-                  <div className="mb-2">
-                    {car.available ? (
-                      <span className="badge border border-success text-success w-100 py-2 shadow-sm text-uppercase"
-                        style={{ letterSpacing: '1px', backgroundColor: '#f0fff4', fontSize: '0.7rem' }}>
-                        ● Available
-                      </span>
-                    ) : (
-                      <span className="badge border border-danger text-danger w-100 py-2 shadow-sm text-uppercase"
-                        style={{ letterSpacing: '1px', backgroundColor: '#fff5f5', fontSize: '0.7rem' }}>
-                        ● Booked
-                      </span>
-                    )}
+                  <div className="p-3 pb-2 text-center">
+                    <h5 className="fw-bold text-uppercase" style={{ fontSize: '1rem' }}>{car.brand} {car.model}</h5>
                   </div>
 
-                  <button
-                    className="btn btn-primary w-100 fw-bold py-2 shadow-sm rounded-2"
-                    onClick={() => handleRentClick(car)}
-                    disabled={!car.available} // available false නම් button එක disable වේ
-                  >
-                    {car.available ? 'BOOK NOW' : 'NOT AVAILABLE'}
-                  </button>
+                  <div className="row g-0 mb-3 align-items-center px-2" style={{ fontSize: '0.85rem' }}>
+                    <div className="col-6 border-end text-center">
+                      <span className="text-muted d-block small text-uppercase" style={{ fontSize: '0.6rem' }}>Daily Price</span>
+                      <strong className="text-primary">LKR {car.pricePerDay.toLocaleString()}</strong>
+                    </div>
+                    <div className="col-6 text-center">
+                      <span className="text-muted d-block small text-uppercase" style={{ fontSize: '0.6rem' }}>Location</span>
+                      <strong className="text-dark text-truncate d-block px-1" title={car.pickupAddress}>
+                        {car.pickupAddress || 'N/A'}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto px-3">
+                    <div className="mb-2">
+                      {isAvailable ? (
+                        <span className="badge border border-success text-success w-100 py-2 shadow-sm text-uppercase"
+                          style={{ letterSpacing: '1px', backgroundColor: '#f0fff4', fontSize: '0.7rem' }}>
+                          ● Available
+                        </span>
+                      ) : (
+                        <span className="badge border border-danger text-danger w-100 py-2 shadow-sm text-uppercase"
+                          style={{ letterSpacing: '1px', backgroundColor: '#fff5f5', fontSize: '0.7rem' }}>
+                          ● Booked
+                        </span>
+                      )}
+                    </div>
+
+                    {/* මෙහිදී Button එකේ පැහැය සහ text එක වෙනස් වේ */}
+                    <button
+                      className={`btn w-100 fw-bold py-2 shadow-sm rounded-2 ${isAvailable ? 'btn-primary' : 'btn-secondary'}`}
+                      onClick={() => handleRentClick(car)}
+                      disabled={!isAvailable} 
+                    >
+                      {isAvailable ? 'BOOK NOW' : 'NOT AVAILABLE'}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     );
   };
+
   return (
     <>
       <Navbar />
@@ -130,7 +156,7 @@ function Vehicle() {
           </div>
         )}
       </div>
-
+      <Footer />
     </>
   );
 }

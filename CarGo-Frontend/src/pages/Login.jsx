@@ -10,55 +10,49 @@ function Login() {
     });
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        localStorage.clear(); 
-        sessionStorage.clear();
-    
-        navigate("/login"); 
-    };
-
     const handleChange = (e) => {
         setLoginData({ ...loginData, [e.target.name]: e.target.value });
     };
 
-   const handleLogin = async (e) => {
-    e.preventDefault();
-    localStorage.clear();
-    sessionStorage.clear();
-
-    Swal.fire({
-        title: 'Please Wait',
-        didOpen: () => { Swal.showLoading(); }
-    });
-
-    try {
-        const res = await axios.post('http://localhost:8080/api/v1/customer/login', loginData);
+    const handleLogin = async (e) => {
+        e.preventDefault();
         
-        console.log("Full Backend Response:", res.data); 
+     
+        localStorage.clear();
+        sessionStorage.clear();
 
-        if (res.status === 200) {
-         
-           
+        Swal.fire({
+            title: 'Please Wait',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
+        try {
+            const res = await axios.post('http://localhost:8080/api/v1/customer/login', loginData);
+
+if (res.status === 200) {
+    const userData = res.data;
+    console.log("Data from Backend:", userData); 
+
+    const userToSave = {
+       
+        id: userData.customerid, 
+        email: userData.email,
+        firstName: userData.firstName
+    };
+
+    localStorage.setItem('user', JSON.stringify(userToSave));
+    window.location.href = "/home";
+}
             
-            localStorage.setItem('user', JSON.stringify(res.data));
-            
-            Swal.fire({ 
-                icon: 'success', 
-                title: 'Login Successful!',
-                timer: 1500,
-                showConfirmButton: false 
-            }).then(() => {
-                navigate('/Home');
-            });
-        }
-    } catch (err) {
+        }catch (err) {
             Swal.close();
-            console.error("4. Error Details:", err.response ? err.response.data : err.message);
+            console.error("Login Error:", err);
             
             Swal.fire({
                 icon: 'error',
                 title: 'Login Failed!',
-                text: err.response?.data || "Something went wrong"
+                text: err.response?.data || "Invalid Email or Password"
             });
         }
     };
@@ -76,6 +70,7 @@ function Login() {
                                 name="email"
                                 placeholder="example@gmail.com"
                                 className="form-control"
+                                value={loginData.email}
                                 onChange={handleChange}
                                 required
                             />
@@ -87,6 +82,7 @@ function Login() {
                                 name="password"
                                 placeholder="Enter password"
                                 className="form-control"
+                                value={loginData.password}
                                 onChange={handleChange}
                                 required
                             />

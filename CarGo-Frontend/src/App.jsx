@@ -12,6 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import MyBookings from './pages/MyBooking';
 import FAQ from './pages/Faq';
+import About from './pages/About';
 
 
 function App() {
@@ -40,9 +41,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/vehicles" element={<Vehicle />} />
           <Route path="/booking" element={<Booking />} />
-          <Route path="/about" element={<div className="container mt-5"><h2>About Us</h2></div>} />
+          <Route path="/about" element={<div className="container mt-5"><About /></div>} />
           <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/FAQ" element={<FAQ />} />
+          <Route path="/about" element={<About />} />
        
           <Route 
             path="/admin-dashboard" 

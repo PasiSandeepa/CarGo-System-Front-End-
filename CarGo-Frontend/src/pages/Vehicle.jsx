@@ -156,7 +156,7 @@ const handleRentClick = (car) => {
           </div>
         )}
       </div>
-      <Footer />
+    
     </>
   );
 }

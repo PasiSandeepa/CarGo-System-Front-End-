@@ -94,7 +94,7 @@ function Booking() {
             <Navbar />
             <div className="container mt-5 pt-5 pb-5">
                 <div className="row g-4">
-                
+
                     <div className="col-lg-5 col-md-12">
                         <div className="card shadow-lg border-0 rounded-4 overflow-hidden">
                             <img
@@ -126,6 +126,12 @@ function Booking() {
                                             <small className="text-muted d-block">Seats</small>
                                             <strong>{car.seats} Person</strong>
                                         </div>
+                                        <div className="col-6">
+                                            <div className="p-2 border rounded bg-light">
+                                                <small className="text-muted d-block">Transmission</small>
+                                                <strong className="text-primary">{car.transmission || 'N/A'}</strong>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="col-6">
                                         <div className="p-2 border rounded bg-light">
@@ -151,6 +157,7 @@ function Booking() {
                                                     <strong>{car.pickupAddress}</strong>
                                                 </div>
 
+
                                                 <button
                                                     type="button"
                                                     className="btn btn-sm btn-outline-danger rounded-pill px-3"
@@ -159,6 +166,7 @@ function Booking() {
                                                     {showMap ? 'Hide Map' : 'View on Map'}
                                                 </button>
                                             </div>
+
 
                                             {showMap && (
                                                 <div className="mt-3 shadow-sm border rounded-3 overflow-hidden animate__animated animate__fadeIn">
@@ -176,7 +184,7 @@ function Booking() {
                         </div>
                     </div>
 
-             
+
                     <div className="col-lg-7 col-md-12">
                         <div className="card shadow-lg p-4 border-0 rounded-4 h-100">
                             <h3 className="fw-bold text-primary mb-4">Confirm Reservation</h3>

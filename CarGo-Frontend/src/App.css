@@ -63,16 +63,15 @@
 .hover-img:hover {
   transform: scale(1.1); 
 }
-/* මුළු පිටුවේම අමතර ඉඩ ඉවත් කිරීමට */
+
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* දෙපැත්තට scroll වීම වැලැක්වීමට */
+  overflow-x: hidden;
 }
 
-/* Carousel එක සම්පූර්ණයෙන්ම දෙපැත්තට පිරවීමට */
 .carousel-inner, .carousel-item {
-  width: 100vw; /* Viewport width භාවිතා කරන්න */
+  width: 100vw; 
   margin: 0;
   padding: 0;
 }

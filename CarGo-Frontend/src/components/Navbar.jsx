@@ -66,6 +66,7 @@ function Navbar({ notifications }) {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg py-2 fixed-top" style={{ borderBottom: '2px solid #0dcaf0' }}>
             <div className="container">
+                {/* Logo Section */}
                 <Link className="navbar-brand fw-bold d-flex align-items-center" to="/">
                     <img src={logo} alt="CarGo Logo" width="50" height="50" className="rounded-circle me-2 border border-info" style={{ objectFit: 'cover' }} />
                     <span className="h4 text-info mb-0" style={{ letterSpacing: '1px', fontWeight: '800' }}>CarGo</span>
@@ -76,7 +77,8 @@ function Navbar({ notifications }) {
                 </button>
 
                 <div className="collapse navbar-collapse" id="navContent">
-                    <ul className="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
+                    {/* ms-5 භාවිතා කර මෙනු එක Logo එක දෙසට (වමට) ලං කරන ලදී */}
+                    <ul className="navbar-nav ms-5 mb-2 mb-lg-0 gap-1">
                         {commonLinks.map((link) => (
                             <li className="nav-item" key={link.name}>
                                 <Link to={link.path} className={`nav-link px-3 fw-bold small text-uppercase ${location.pathname === link.path ? "text-warning active" : "text-white"}`}>{link.name}</Link>
@@ -89,7 +91,8 @@ function Navbar({ notifications }) {
                         ))}
                     </ul>
 
-                    <div className="d-flex align-items-center gap-2">
+                    {/* දකුණු පස ඇති Buttons සහ Profile කොටස */}
+                    <div className="ms-auto d-flex align-items-center gap-2">
                         {userLoggedIn && isAdmin && (
                             <Link to="/admin-dashboard" className="nav-link text-info fw-bold small px-2 d-flex align-items-center">
                                 <i className="bi bi-speedometer2 me-1"></i> DASHBOARD
@@ -104,7 +107,6 @@ function Navbar({ notifications }) {
                         ) : (
                             <div className="d-flex align-items-center gap-2">
                                 
-                                {/* මෙතැනදී !isAdmin යෙදූ නිසා Admin කෙනෙක් නොවන අයට පමණක් MyBookings පෙනේ */}
                                 {userLoggedIn && !isAdmin && (
                                     <Link to="/my-bookings" className="btn btn-sm btn-outline-warning px-3 rounded-pill fw-bold">
                                         MyBookings

@@ -8,17 +8,20 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Booking from './pages/Booking';
 import AdminDashboard from './pages/AdminDashboard'; 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import MyBookings from './pages/MyBooking';
 import FAQ from './pages/Faq';
-import About from './pages/About';
 
+// වැදගත්: මෙම පිටු දෙක අනිවාර්යයෙන්ම import විය යුතුය
+import About from './pages/About';
+import Contact from './pages/Contact'; 
+
+// CSS Imports
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
- 
   useEffect(() => {
     const userData = localStorage.getItem('user');
     if (userData) {
@@ -33,6 +36,7 @@ function App() {
     <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar notifications={[]} />
 
+      {/* Main Content Area */}
       <div style={{ marginTop: '70px', flex: 1 }}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -41,17 +45,17 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/vehicles" element={<Vehicle />} />
           <Route path="/booking" element={<Booking />} />
-          <Route path="/about" element={<div className="container mt-5"><About /></div>} />
           <Route path="/my-bookings" element={<MyBookings />} />
-          <Route path="/FAQ" element={<FAQ />} />
+          <Route path="/faq" element={<FAQ />} />
+          
+          {/* About සහ Contact routes */}
           <Route path="/about" element={<About />} />
-       
+          <Route path="/contact" element={<Contact />} />
+          
           <Route 
             path="/admin-dashboard" 
             element={isAdmin ? <AdminDashboard /> : <Navigate to="/" />} 
           />
-          
-       
         </Routes>
       </div>
 

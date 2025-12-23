@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Swal from 'sweetalert2';
+import emailjs from '@emailjs/browser';
 
 function Contact() {
+  
+    const form = useRef();
+
+   
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -13,24 +18,42 @@ function Contact() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-    
-        Swal.fire({
-            title: 'Message Sent!',
-            text: 'Thank you for reaching out. Our team will contact you shortly.',
-            icon: 'success',
-            confirmButtonColor: '#0dcaf0',
-            timer: 3000
-        });
 
-        setFormData({ name: '', email: '', subject: '', message: '' });
+      
+        emailjs.sendForm(
+            'service_2f0ia78',    
+            'template_pzxzbs4',   
+            form.current,         
+            'si7xZuZMbAHRDbmzf'  
+        )
+        .then((result) => {
+            console.log('SUCCESS!', result.text);
+            Swal.fire({
+                title: 'Message Sent!',
+                text: 'Thank you for reaching out. We will contact you soon.',
+                icon: 'success',
+                confirmButtonColor: '#0dcaf0',
+                timer: 3000
+            });
+          
+            setFormData({ name: '', email: '', subject: '', message: '' });
+        })
+        .catch((error) => {
+            console.error('FAILED...', error);
+          
+            Swal.fire({
+                title: 'Error!',
+                text: `Failed to send: ${error.text || 'Service ID not found'}`, 
+                icon: 'error',
+                confirmButtonColor: '#d33'
+            });
+        });
     };
 
     return (
         <>
             <Navbar />
             <div className="contact-page pt-5 mt-5 bg-light min-vh-100">
-             
                 <div className="bg-dark text-white py-5 mb-5 shadow">
                     <div className="container text-center">
                         <h1 className="display-4 fw-bold text-info">Contact Us</h1>
@@ -40,11 +63,9 @@ function Contact() {
 
                 <div className="container mb-5">
                     <div className="row g-4">
-             
                         <div className="col-lg-4">
                             <div className="card border-0 shadow-sm rounded-4 p-4 h-100 bg-info text-white">
                                 <h3 className="fw-bold mb-4">Contact Info</h3>
-                                
                                 <div className="d-flex mb-4">
                                     <i className="bi bi-geo-alt-fill fs-3 me-3"></i>
                                     <div>
@@ -52,7 +73,6 @@ function Contact() {
                                         <small>No. 456, Galle Road, Colombo 03, Sri Lanka.</small>
                                     </div>
                                 </div>
-
                                 <div className="d-flex mb-4">
                                     <i className="bi bi-telephone-fill fs-3 me-3"></i>
                                     <div>
@@ -60,7 +80,6 @@ function Contact() {
                                         <small>+94 11 234 5678</small>
                                     </div>
                                 </div>
-
                                 <div className="d-flex mb-4">
                                     <i className="bi bi-envelope-fill fs-3 me-3"></i>
                                     <div>
@@ -68,27 +87,19 @@ function Contact() {
                                         <small>support@cargo.lk</small>
                                     </div>
                                 </div>
-
-                                <div className="mt-auto">
-                                    <h6 className="fw-bold mb-3">Follow Us</h6>
-                                    <div className="d-flex gap-3">
-                                        <i className="bi bi-facebook fs-4"></i>
-                                        <i className="bi bi-instagram fs-4"></i>
-                                        <i className="bi bi-whatsapp fs-4"></i>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
-                   
                         <div className="col-lg-8">
                             <div className="card border-0 shadow rounded-4 p-4 p-md-5">
                                 <h3 className="fw-bold mb-4 text-dark">Send us a Message</h3>
-                                <form onSubmit={handleSubmit}>
+                                
+                                <form ref={form} onSubmit={handleSubmit}>
                                     <div className="row">
                                         <div className="col-md-6 mb-3">
                                             <label className="form-label fw-bold small">Your Name</label>
                                             <input 
+                                                name="user_name" 
                                                 type="text" 
                                                 className="form-control bg-light border-0 py-3" 
                                                 placeholder="Enter your name" 
@@ -100,6 +111,7 @@ function Contact() {
                                         <div className="col-md-6 mb-3">
                                             <label className="form-label fw-bold small">Email Address</label>
                                             <input 
+                                                name="user_email" 
                                                 type="email" 
                                                 className="form-control bg-light border-0 py-3" 
                                                 placeholder="name@example.com" 
@@ -112,6 +124,7 @@ function Contact() {
                                     <div className="mb-3">
                                         <label className="form-label fw-bold small">Subject</label>
                                         <input 
+                                            name="subject" 
                                             type="text" 
                                             className="form-control bg-light border-0 py-3" 
                                             placeholder="How can we help?" 
@@ -123,6 +136,7 @@ function Contact() {
                                     <div className="mb-4">
                                         <label className="form-label fw-bold small">Message</label>
                                         <textarea 
+                                            name="message" 
                                             className="form-control bg-light border-0 py-3" 
                                             rows="5" 
                                             placeholder="Describe your inquiry..."

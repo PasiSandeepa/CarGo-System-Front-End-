@@ -14,7 +14,6 @@ function MyBookings() {
             const storedUser = localStorage.getItem('user');
             if (storedUser) {
                 const userData = JSON.parse(storedUser);
-             
                 const userId = userData.customerid || userData.id;
 
                 if (userId) {
@@ -37,7 +36,7 @@ function MyBookings() {
     const handleCancel = async (bookingId) => {
         Swal.fire({
             title: 'Are you sure?',
-            text: "Do you want to cancel this booking? This action cannot be undone.",
+            text: "Do you want to cancel this booking? The vehicle will be released for others.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
@@ -46,21 +45,20 @@ function MyBookings() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                  
+                
                     await axios.put(`http://localhost:8080/api/v1/booking/cancel/${bookingId}`);
                     
                     Swal.fire(
                         'Cancelled!',
-                        'Your booking status has been updated to CANCELLED.',
+                        'Your booking has been cancelled and the vehicle is now available.',
                         'success'
                     );
                     
-                  
                     fetchMyBookings(); 
                 } catch (error) {
                     Swal.fire(
                         'Error!',
-                        'Could not cancel the booking. Please check your backend connection.',
+                        'Could not cancel. Please check if the backend is running.',
                         'error'
                     );
                     console.error("Cancel error:", error);
@@ -72,7 +70,7 @@ function MyBookings() {
     if (loading) return (
         <div className="container mt-5 pt-5 text-center">
             <div className="spinner-border text-primary" role="status"></div>
-            <p className="mt-2">Fetching your trip details...</p>
+            <p className="mt-2">Loading your bookings...</p>
         </div>
     );
 
@@ -83,13 +81,12 @@ function MyBookings() {
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h2 className="fw-bold text-dark">My Bookings</h2>
                     <button className="btn btn-sm btn-outline-primary" onClick={fetchMyBookings}>
-                        <i className="bi bi-arrow-clockwise"></i> Refresh List
+                        Refresh List
                     </button>
                 </div>
                 
                 {bookings.length === 0 ? (
-                    <div className="alert alert-info border-0 shadow-sm text-center py-5">
-                        <i className="bi bi-calendar-x fs-1 d-block mb-2"></i>
+                    <div className="alert alert-info text-center py-5 shadow-sm">
                         You haven't made any bookings yet.
                     </div>
                 ) : (
@@ -121,9 +118,8 @@ function MyBookings() {
                                         </td>
                                         <td>
                                             <span className={`badge rounded-pill px-3 py-2 ${
-                                                booking.bookingStatus === 'PENDING' ? 'bg-warning text-dark' : 
                                                 booking.bookingStatus === 'CONFIRMED' ? 'bg-success' : 
-                                                booking.bookingStatus === 'CANCELLED' ? 'bg-secondary' : 'bg-danger'
+                                                booking.bookingStatus === 'CANCELLED' ? 'bg-secondary' : 'bg-warning text-dark'
                                             }`}>
                                                 {booking.bookingStatus}
                                             </span>
@@ -132,10 +128,10 @@ function MyBookings() {
                                             LKR {booking.totalAmount?.toLocaleString()}
                                         </td>
                                         <td className="text-center pe-4">
-                                         
-                                            {booking.bookingStatus === 'PENDING' ? (
+                                          
+                                            {(booking.bookingStatus === 'PENDING' || booking.bookingStatus === 'CONFIRMED') ? (
                                                 <button 
-                                                    className="btn btn-sm btn-danger rounded-pill px-4 shadow-sm"
+                                                    className="btn btn-sm btn-danger rounded-pill px-4"
                                                     onClick={() => handleCancel(booking.bookId)}
                                                 >
                                                     Cancel

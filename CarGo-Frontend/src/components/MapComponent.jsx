@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// Leaflet markers නිවැරදිව පෙන්වීමට අවශ්‍ය settings
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
@@ -16,7 +15,7 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 function MapComponent({ locationName, lat, lng }) {
-    // Database එකේ අගයන් නැතිනම් කොළඹ පෙන්වයි
+
     const position = [lat || 6.9271, lng || 79.8612]; 
 
     return (
@@ -26,7 +25,7 @@ function MapComponent({ locationName, lat, lng }) {
                 zoom={13} 
                 scrollWheelZoom={false} 
                 style={{ height: '100%' }}
-                key={`${lat}-${lng}`} // ස්ථානය මාරු වන විට සිතියම update වීමට මෙය අවශ්‍යයි
+                key={`${lat}-${lng}`}
             >
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -41,5 +40,4 @@ function MapComponent({ locationName, lat, lng }) {
     );
 }
 
-// මෙතැන ඇත්තේ එකම එක export default එකක් පමණක් බව තහවුරු කරගන්න
 export default MapComponent;

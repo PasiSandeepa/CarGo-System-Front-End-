@@ -9,7 +9,6 @@ function About() {
             <Navbar />
             <div className="about-page pt-5 mt-5">
 
-                {/* Hero Section */}
                 <div className="bg-dark text-white py-5 mb-4 shadow">
                     <div className="container text-center">
                         <h1 className="display-4 fw-bold text-info">Driving Your Dreams</h1>
@@ -20,7 +19,7 @@ function About() {
                 <div className="container mb-5">
                     <div className="row align-items-center">
 
-                        {/* Image Column */}
+                
                         <div className="col-lg-6 mb-4">
                             <img
                                 src="https://imgcdn.zigwheels.vn/medium/gallery/exterior/9/958/honda-hr-v-18808.jpg"
@@ -29,7 +28,6 @@ function About() {
                             />
                         </div>
 
-                        {/* Why Choose Section */}
                         <div className="col-lg-6 ps-lg-5">
                             <h2 className="fw-bold mb-3 text-dark">Why Choose <span className="text-info">CarGo</span>?</h2>
                             <p className="text-muted border-start border-4 border-info ps-3">
@@ -38,8 +36,9 @@ function About() {
                             </p>
 
                             <div className="mt-4">
-                                <div className="d-flex mb-4">
-                                    <div className="bg-info text-white rounded-circle p-3 me-3 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '60px', height: '60px' }}>
+
+                                <div className="d-flex mb-4 p-2 rounded">
+                                    <div className="bg-info text-white rounded-circle p-3 me-3 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '60px', height: '60px', flexShrink: 0 }}>
                                         <i className="bi bi-shield-check fs-4"></i>
                                     </div>
                                     <div>
@@ -48,9 +47,9 @@ function About() {
                                     </div>
                                 </div>
 
-                                {/* Link to Contact Support */}
+                              
                                 <Link to="/contact" className="text-decoration-none d-flex mb-4 p-2 rounded contact-link-hover" style={{ transition: '0.3s' }}>
-                                    <div className="bg-primary text-white rounded-circle p-3 me-3 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '60px', height: '60px' }}>
+                                    <div className="bg-primary text-white rounded-circle p-3 me-3 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '60px', height: '60px', flexShrink: 0 }}>
                                         <i className="bi bi-clock-history fs-4"></i>
                                     </div>
                                     <div>
@@ -59,8 +58,9 @@ function About() {
                                     </div>
                                 </Link>
 
-                                <div className="d-flex mb-4">
-                                    <div className="bg-success text-white rounded-circle p-3 me-3 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '60px', height: '60px' }}>
+             
+                                <div className="d-flex mb-4 p-2 rounded">
+                                    <div className="bg-success text-white rounded-circle p-3 me-3 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '60px', height: '60px', flexShrink: 0 }}>
                                         <i className="bi bi-wallet2 fs-4"></i>
                                     </div>
                                     <div>
@@ -73,7 +73,7 @@ function About() {
                     </div>
                 </div>
 
-                {/* Stats Section */}
+          
                 <div className="bg-light py-5 border-top border-bottom">
                     <div className="container">
                         <div className="row text-center">
@@ -97,7 +97,7 @@ function About() {
                     </div>
                 </div>
             </div>
-          
+           
         </>
     );
 }

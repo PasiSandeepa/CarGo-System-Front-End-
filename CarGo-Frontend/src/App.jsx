@@ -10,10 +10,9 @@ import Booking from './pages/Booking';
 import AdminDashboard from './pages/AdminDashboard'; 
 import MyBookings from './pages/MyBooking';
 import FAQ from './pages/Faq';
-
-// වැදගත්: මෙම පිටු දෙක අනිවාර්යයෙන්ම import විය යුතුය
 import About from './pages/About';
 import Contact from './pages/Contact'; 
+import Services from './pages/Service'; 
 
 // CSS Imports
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,6 +25,7 @@ function App() {
     const userData = localStorage.getItem('user');
     if (userData) {
       const user = JSON.parse(userData);
+     
       if (user.role === 'ADMIN' || user.email === 'pasisandeepa456@gmail.com') {
         setIsAdmin(true);
       }
@@ -36,7 +36,6 @@ function App() {
     <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar notifications={[]} />
 
-      {/* Main Content Area */}
       <div style={{ marginTop: '70px', flex: 1 }}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -47,15 +46,18 @@ function App() {
           <Route path="/booking" element={<Booking />} />
           <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/faq" element={<FAQ />} />
-          
-          {/* About සහ Contact routes */}
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+       
+          <Route path="/service" element={<Services />} /> 
           
           <Route 
             path="/admin-dashboard" 
             element={isAdmin ? <AdminDashboard /> : <Navigate to="/" />} 
           />
+
+
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
 

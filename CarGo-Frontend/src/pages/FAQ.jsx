@@ -33,7 +33,7 @@ const FAQ = () => {
     return (
         <div className="faq-section py-5 bg-light" style={{ minHeight: '80vh' }}>
             <div className="container">
-                {/* Header Section */}
+          
                 <div className="text-center mb-5">
                     <span className="badge bg-primary-soft text-primary px-3 py-2 mb-2 rounded-pill fw-bold">HELP CENTER</span>
                     <h2 className="display-5 fw-bold text-dark">Frequently Asked <span className="text-primary">Questions</span></h2>
@@ -73,7 +73,6 @@ const FAQ = () => {
                     </div>
                 </div>
 
-                {/* Bottom Contact CTA */}
                 <div className="text-center mt-5 p-4 bg-white shadow-sm rounded-4 border">
                     <h5 className="fw-bold">Still have questions?</h5>
                     <p className="text-muted">If you cannot find an answer to your question in our FAQ, you can always contact us.</p>

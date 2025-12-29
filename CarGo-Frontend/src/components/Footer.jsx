@@ -36,6 +36,15 @@ function Footer() {
                             <li className="mb-2">
                                 <a href="/about" className="text-white opacity-75 text-decoration-none hover-opacity-100">About Us</a>
                             </li>
+                             <li className="mb-2">
+                                <a href="/service" className="text-white opacity-75 text-decoration-none hover-opacity-100">Service</a>
+                            </li>
+                             <li className="mb-2">
+                                <a href="/contact" className="text-white opacity-75 text-decoration-none hover-opacity-100">Contact</a>
+                            </li>
+                             <li className="mb-2">
+                                <a href="/faq" className="text-white opacity-75 text-decoration-none hover-opacity-100">FAQ</a>
+                            </li>
                         </ul>
                     </div>
                 
@@ -60,7 +69,7 @@ function Footer() {
 
                 </div>
 
-                <hr className="bg-secondary mt-5 mb-4 opacity-25" />
+              <hr className="fw-bold text-info mt-5 mb-4 opacity-100" />
                 <div className="row align-items-center">
                     <div className="col-md-6 text-center text-md-start">
                 
@@ -70,10 +79,10 @@ function Footer() {
                     </div>
                     <div className="col-md-6 text-center text-md-end mt-2 mt-md-0">
                    
-                        <a href="#" className="text-white text-decoration-none small me-3 opacity-75 hover-opacity-100">
+                        <a href="#" className="text-white text-decoration-none small me-3 opacity-100 hover-opacity-100">
                             Privacy Policy
                         </a>
-                        <a href="#" className="text-white text-decoration-none small opacity-75 hover-opacity-100">
+                        <a href="#" className="text-white text-decoration-none small opacity-100 hover-opacity-100">
                             Terms of Service
                         </a>
                     </div>

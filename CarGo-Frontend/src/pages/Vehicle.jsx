@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+
 
 function Vehicle() {
   const [cars, setCars] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,70 +17,75 @@ function Vehicle() {
       .catch(err => console.error('Error fetching cars:', err));
   }, []);
 
-  const sedans = cars.filter(car => car.type?.toLowerCase() === 'sedan');
-  const vans = cars.filter(car => car.type?.toLowerCase() === 'van');
-  const suvs = cars.filter(car =>
+
+  const filteredCars = cars.filter(car =>
+    car.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    car.model?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const sedans = filteredCars.filter(car => car.type?.toLowerCase() === 'sedan');
+  const vans = filteredCars.filter(car => car.type?.toLowerCase() === 'van');
+  const suvs = filteredCars.filter(car =>
     car.type?.toLowerCase() === 'suv' || car.type?.toLowerCase() === 'electric suv'
   );
-  const hatchbacks = cars.filter(car => car.type?.toLowerCase() === 'hatchback');
-  const others = cars.filter(car =>
+  const hatchbacks = filteredCars.filter(car => car.type?.toLowerCase() === 'hatchback');
+  const others = filteredCars.filter(car =>
     !['sedan', 'van', 'suv', 'electric suv', 'hatchback'].includes(car.type?.toLowerCase())
   );
 
-const handleRentClick = (car) => {
-  const user = localStorage.getItem('user');
+  const handleRentClick = (car) => {
+    const user = localStorage.getItem('user');
 
-  if (!user) {
+    if (!user) {
+      Swal.fire({
+        title: 'Login Required',
+        text: 'To reserve a vehicle, please log in first.!',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#0d6efd',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Login ',
+        cancelButtonText: 'See you later.'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/login');
+        }
+      });
+      return;
+    }
+
     Swal.fire({
-      title: 'Login Required',
-      text: 'To reserve a vehicle, please log in first.!',
-      icon: 'info',
+      title: `Rent this ${car.model}?`,
+      text: `Daily Price: LKR ${car.pricePerDay.toLocaleString()}`,
+      imageUrl: car.imageUrl ? `http://localhost:8080/api/v1/cars/image-proxy?url=${encodeURIComponent(car.imageUrl)}` : 'https://placehold.co/400x200',
+      imageWidth: 600,
+      imageHeight: 400,
       showCancelButton: true,
+      confirmButtonText: 'Book Now',
       confirmButtonColor: '#0d6efd',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Login ',
-      cancelButtonText: 'See you later.'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate('/login'); 
+        navigate('/Booking', { state: { carData: car } });
       }
     });
-    return; 
-  }
-
-  Swal.fire({
-    title: `Rent this ${car.model}?`,
-    text: `Daily Price: LKR ${car.pricePerDay.toLocaleString()}`,
-    imageUrl: car.imageUrl ? `http://localhost:8080/api/v1/cars/image-proxy?url=${encodeURIComponent(car.imageUrl)}` : 'https://placehold.co/400x200',
-    imageWidth: 600,
-    imageHeight: 400,
-    showCancelButton: true,
-    confirmButtonText: 'Book Now',
-    confirmButtonColor: '#0d6efd',
-    cancelButtonText: 'Cancel'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      navigate('/Booking', { state: { carData: car } });
-    }
-  });
-};
+  };
 
   const renderCarList = (carList, title) => {
     if (carList.length === 0) return null;
 
     return (
       <div className="mb-5">
-        <h2 className="fw-bold text-dark border-bottom border-3 border-primary pb-2 mb-4 fs-2 text-uppercase">
+        <h2 className="fw-bold text-dark border-bottom border-5 border-info pb-2 mb-3 fs-3 text-uppercase">
           {title}
         </h2>
         <div className="row">
           {carList.map((car) => {
-    
             const isAvailable = car.available === true || car.available === 1;
 
             return (
               <div key={car.carid} className="col-lg-3 col-md-6 col-sm-6 mb-4">
-                <div className="card h-100 shadow-sm border border-danger border-2 d-flex flex-column pb-3">
+                <div className="card h-100 shadow-sm border border-danger border-3 d-flex flex-column pb-3">
                   <img
                     src={car.imageUrl ? `http://localhost:8080/api/v1/cars/image-proxy?url=${encodeURIComponent(car.imageUrl)}` : "https://placehold.co/400x200?text=No+Image"}
                     onError={(e) => { e.target.src = "https://placehold.co/400x200?text=Load+Error"; }}
@@ -121,11 +126,10 @@ const handleRentClick = (car) => {
                       )}
                     </div>
 
-                  
                     <button
                       className={`btn w-100 fw-bold py-2 shadow-sm rounded-2 ${isAvailable ? 'btn-primary' : 'btn-secondary'}`}
                       onClick={() => handleRentClick(car)}
-                      disabled={!isAvailable} 
+                      disabled={!isAvailable}
                     >
                       {isAvailable ? 'BOOK NOW' : 'NOT AVAILABLE'}
                     </button>
@@ -141,22 +145,47 @@ const handleRentClick = (car) => {
 
   return (
     <>
-      <Navbar />
-      <div className="container mt-5">
-        {renderCarList(sedans, " Sedans / Cars")}
-        {renderCarList(hatchbacks, " Hatchbacks")}
-        {renderCarList(vans, " Vans")}
-        {renderCarList(suvs, " SUVs & Electric")}
-        {renderCarList(others, " Crossover")}
+        <div className="container mt-5 pt-3">
 
-        {cars.length === 0 && (
+        <div className="row mb-4 justify-content-end">
+          <div className="col-md-4">
+            <div className="input-group border border-info rounded shadow-sm">
+              <span className="input-group-text bg-white border-0">
+                <i className="bi bi-search text-info"></i>
+              </span>
+              <input
+                type="text"
+                className="form-control border-0 shadow-none"
+                placeholder="Search vehicles by brand or model..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+
+        {filteredCars.length > 0 ? (
+          <>
+            {renderCarList(sedans, " Sedans / Cars")}
+            {renderCarList(hatchbacks, " Hatchbacks")}
+            {renderCarList(vans, " Vans")}
+            {renderCarList(suvs, " SUVs & Electric")}
+            {renderCarList(others, " Crossover")}
+          </>
+        ) : (
+          <div className="alert alert-warning text-center fw-bold mt-5">
+            No vehicles found matching "{searchTerm}"
+          </div>
+        )}
+
+    {cars.length === 0 && (
           <div className="alert alert-info text-center fw-bold mt-5 shadow-sm">
             <div className="spinner-border spinner-border-sm me-2" role="status"></div>
             Searching for available vehicles...
           </div>
         )}
       </div>
-    
+
     </>
   );
 }

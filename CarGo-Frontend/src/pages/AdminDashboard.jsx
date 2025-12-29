@@ -116,7 +116,7 @@ const AdminDashboard = () => {
                     year: parseInt(popup.querySelector('#year').value) || 0,
                     fuelType: popup.querySelector('#fuelType').value,
                     type: popup.querySelector('#type').value,
-                    
+
                     transmission: popup.querySelector('#swal-transmission').value,
                     engineCapacity: parseFloat(popup.querySelector('#engineCap').value) || 0,
                     seats: parseInt(popup.querySelector('#seats').value) || 0,
@@ -221,7 +221,7 @@ const AdminDashboard = () => {
                                                 <div>
                                                     <div className="fw-bold">{car.brand} {car.model}</div>
                                                     <div className="text-muted small">
-                                                    
+
                                                         {car.registrationNo} • <span className="text-primary fw-medium">{car.transmission}</span>
                                                     </div>
                                                 </div>

@@ -12,9 +12,10 @@ import MyBookings from './pages/MyBooking';
 import FAQ from './pages/Faq';
 import About from './pages/About';
 import Contact from './pages/Contact'; 
-import Services from './pages/Service'; 
+import Services from './pages/Service';
+import Customer from './pages/Customer';
 
-// CSS Imports
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
@@ -48,8 +49,11 @@ function App() {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          
        
           <Route path="/service" element={<Services />} /> 
+           <Route path="/customer" element={<Customer />} />
+        
           
           <Route 
             path="/admin-dashboard" 

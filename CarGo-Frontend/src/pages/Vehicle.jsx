@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-
 function Vehicle() {
   const [cars, setCars] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,7 +15,6 @@ function Vehicle() {
       })
       .catch(err => console.error('Error fetching cars:', err));
   }, []);
-
 
   const filteredCars = cars.filter(car =>
     car.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -39,12 +37,12 @@ function Vehicle() {
     if (!user) {
       Swal.fire({
         title: 'Login Required',
-        text: 'To reserve a vehicle, please log in first.!',
+        text: 'To reserve a vehicle, please log in first!',
         icon: 'info',
         showCancelButton: true,
         confirmButtonColor: '#0d6efd',
         cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Login ',
+        confirmButtonText: 'Login',
         cancelButtonText: 'See you later.'
       }).then((result) => {
         if (result.isConfirmed) {
@@ -113,17 +111,10 @@ function Vehicle() {
 
                   <div className="mt-auto px-3">
                     <div className="mb-2">
-                      {isAvailable ? (
-                        <span className="badge border border-success text-success w-100 py-2 shadow-sm text-uppercase"
-                          style={{ letterSpacing: '1px', backgroundColor: '#f0fff4', fontSize: '0.7rem' }}>
-                          ● Available
-                        </span>
-                      ) : (
-                        <span className="badge border border-danger text-danger w-100 py-2 shadow-sm text-uppercase"
-                          style={{ letterSpacing: '1px', backgroundColor: '#fff5f5', fontSize: '0.7rem' }}>
-                          ● Booked
-                        </span>
-                      )}
+                      <span className={`badge border w-100 py-2 shadow-sm text-uppercase ${isAvailable ? 'border-success text-success' : 'border-danger text-danger'}`}
+                        style={{ letterSpacing: '1px', backgroundColor: isAvailable ? '#f0fff4' : '#fff5f5', fontSize: '0.7rem' }}>
+                        ● {isAvailable ? 'Available' : 'Booked'}
+                      </span>
                     </div>
 
                     <button
@@ -144,49 +135,53 @@ function Vehicle() {
   };
 
   return (
-    <>
-        <div className="container mt-5 pt-3">
-
-        <div className="row mb-4 justify-content-end">
-          <div className="col-md-4">
-            <div className="input-group border border-info rounded shadow-sm">
-              <span className="input-group-text bg-white border-0">
-                <i className="bi bi-search text-info"></i>
-              </span>
-              <input
-                type="text"
-                className="form-control border-0 shadow-none"
-                placeholder="Search vehicles by brand or model..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+    <div className="container mt-5 pt-3">
+     
+      <div className="row mb-4 justify-content-end">
+        <div className="col-md-4">
+          <div className="input-group border border-info rounded shadow-sm bg-white overflow-hidden">
+            <span className="input-group-text bg-white border-0">
+              <i className="bi bi-search text-info"></i>
+            </span>
+            <input
+              type="text"
+              className="form-control border-0 shadow-none bg-white"
+              placeholder="Search vehicles by brand or model..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              autoComplete="off"
+            />
+            {searchTerm && (
+              <button className="btn btn-white border-0 text-muted" onClick={() => setSearchTerm("")}>
+                <i className="bi bi-x-lg"></i>
+              </button>
+            )}
           </div>
         </div>
-
-        {filteredCars.length > 0 ? (
-          <>
-            {renderCarList(sedans, " Sedans / Cars")}
-            {renderCarList(hatchbacks, " Hatchbacks")}
-            {renderCarList(vans, " Vans")}
-            {renderCarList(suvs, " SUVs & Electric")}
-            {renderCarList(others, " Crossover")}
-          </>
-        ) : (
-          <div className="alert alert-warning text-center fw-bold mt-5">
-            No vehicles found matching "{searchTerm}"
-          </div>
-        )}
-
-    {cars.length === 0 && (
-          <div className="alert alert-info text-center fw-bold mt-5 shadow-sm">
-            <div className="spinner-border spinner-border-sm me-2" role="status"></div>
-            Searching for available vehicles...
-          </div>
-        )}
       </div>
 
-    </>
+  
+      {filteredCars.length > 0 ? (
+        <>
+          {renderCarList(sedans, "Sedans / Cars")}
+          {renderCarList(hatchbacks, "Hatchbacks")}
+          {renderCarList(vans, "Vans")}
+          {renderCarList(suvs, "SUVs & Electric")}
+          {renderCarList(others, "Crossover")}
+        </>
+      ) : (
+        <div className="alert alert-warning text-center fw-bold mt-5">
+          No vehicles found matching "{searchTerm}"
+        </div>
+      )}
+
+      {cars.length === 0 && (
+        <div className="alert alert-info text-center fw-bold mt-5 shadow-sm">
+          <div className="spinner-border spinner-border-sm me-2" role="status"></div>
+          Searching for available vehicles...
+        </div>
+      )}
+    </div>
   );
 }
 

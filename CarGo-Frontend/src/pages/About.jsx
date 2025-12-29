@@ -19,7 +19,7 @@ function About() {
                 <div className="container mb-5">
                     <div className="row align-items-center">
 
-                
+
                         <div className="col-lg-6 mb-4">
                             <img
                                 src="https://imgcdn.zigwheels.vn/medium/gallery/exterior/9/958/honda-hr-v-18808.jpg"
@@ -47,7 +47,7 @@ function About() {
                                     </div>
                                 </div>
 
-                              
+
                                 <Link to="/contact" className="text-decoration-none d-flex mb-4 p-2 rounded contact-link-hover" style={{ transition: '0.3s' }}>
                                     <div className="bg-primary text-white rounded-circle p-3 me-3 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '60px', height: '60px', flexShrink: 0 }}>
                                         <i className="bi bi-clock-history fs-4"></i>
@@ -58,7 +58,7 @@ function About() {
                                     </div>
                                 </Link>
 
-             
+
                                 <div className="d-flex mb-4 p-2 rounded">
                                     <div className="bg-success text-white rounded-circle p-3 me-3 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '60px', height: '60px', flexShrink: 0 }}>
                                         <i className="bi bi-wallet2 fs-4"></i>
@@ -73,7 +73,7 @@ function About() {
                     </div>
                 </div>
 
-          
+
                 <div className="bg-light py-5 border-top border-bottom">
                     <div className="container">
                         <div className="row text-center">
@@ -97,7 +97,7 @@ function About() {
                     </div>
                 </div>
             </div>
-           
+
         </>
     );
 }

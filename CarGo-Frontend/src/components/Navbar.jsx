@@ -28,8 +28,7 @@ function Navbar() {
     const handleMarkAsRead = async (id) => {
         try {
             await axios.put(`http://localhost:8080/api/v1/notifications/read/${id}`);
-            setNotifications(prev => prev.filter(n => n.notificationId !== id));
-            if (currentUser && currentUser.id) {
+            if (currentUser?.id) {
                 fetchNotifications(currentUser.id); 
             }
         } catch (error) {
@@ -95,16 +94,17 @@ function Navbar() {
         { name: "About", path: "/about" },
         { name: "Services", path: "/service" },
         { name: "Contact", path: "/contact" },
-        { name: "FAQ", path: "/faq" }
+        { name: "FAQ", path: "/faq" },
+        { name: "Payment", path: "/payment" }
     ];
 
     const adminOnlyLinks = [
-        { name: "Customers", path: "/customers" },
+        { name: "Customers", path: "/customer" }, 
         { name: "Payments", path: "/payment" }
     ];
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg py-2 fixed-top" style={{ borderBottom: '4px solid #04e3f7ff', overflow: 'visible' }}>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg py-2 fixed-top" style={{ borderBottom: '4px solid #04e3f7ff' }}>
             <div className="container-fluid px-lg-5">
                 <Link className="navbar-brand fw-bold d-flex align-items-center me-0" to="/">
                     <img src={logo} alt="CarGo Logo" width="55" height="50" className="rounded-circle me-2 border border-info" />
@@ -135,8 +135,7 @@ function Navbar() {
 
                     <div className="d-flex align-items-center gap-2">
                         {userLoggedIn && (
-                       
-                            <span className={`badge rounded-pill ${isAdmin ? 'bg-success' : 'bg-success'} small px-3 py-2 text-uppercase fw-bold me-2`} style={{ letterSpacing: '1px' }}>
+                            <span className="badge rounded-pill bg-success small px-3 py-2 text-uppercase fw-bold me-2" style={{ letterSpacing: '1px' }}>
                                 <i className={`bi ${isAdmin ? 'bi-shield-lock-fill' : 'bi-person-fill'} me-1`}></i>
                                 {isAdmin ? 'Admin' : 'User'}
                             </span>
@@ -155,19 +154,19 @@ function Navbar() {
 
                                 {isNotifyOpen && (
                                     <div className="bg-white shadow-lg border mt-2 py-0" style={{ position: 'absolute', right: 0, width: '320px', borderRadius: '12px', zIndex: 3000, top: '50px', overflow: 'hidden' }}>
-                                        <div className={`${isAdmin ? 'bg-success' : 'bg-info'} p-2 text-white text-center fw-bold small uppercase`}>
+                                        <div className={`${isAdmin ? 'bg-success' : 'bg-info'} p-2 text-white text-center fw-bold small text-uppercase`}>
                                             <i className="bi bi-megaphone-fill me-2"></i>
                                             {isAdmin ? "Admin: New Bookings" : "User: Notifications"}
                                         </div>
                                         <div style={{ maxHeight: '350px', overflowY: 'auto' }}>
-                                            {unreadNotifications.length === 0 ? (
+                                            {unreadCount === 0 ? (
                                                 <div className="p-4 text-center small text-muted">
                                                     <i className="bi bi-check2-circle fs-3 d-block mb-2 text-success"></i>
                                                     No new notifications
                                                 </div>
                                             ) : (
                                                 unreadNotifications.map((note) => (
-                                                    <div key={note.notificationId} className="p-3 border-bottom small bg-light fw-bold border-start border-4 border-info notification-item" style={{ cursor: 'pointer', transition: '0.3s' }} onClick={() => handleMarkAsRead(note.notificationId)}>
+                                                    <div key={note.notificationId} className="p-3 border-bottom small bg-light fw-bold border-start border-4 border-info" style={{ cursor: 'pointer' }} onClick={() => handleMarkAsRead(note.notificationId)}>
                                                         <div className="text-dark mb-1" style={{ whiteSpace: 'normal', lineHeight: '1.4' }}>
                                                             {note.message}
                                                         </div>
@@ -185,12 +184,6 @@ function Navbar() {
                             </div>
                         )}
 
-                        {userLoggedIn && isAdmin && (
-                            <Link to="/admin-dashboard" className="btn btn-sm btn-outline-info rounded-pill fw-bold">
-                                <i className="bi bi-speedometer2 me-1"></i> DASHBOARD
-                            </Link>
-                        )}
-
                         {!userLoggedIn ? (
                             <div className="d-flex gap-2">
                                 <Link to="/login" className="btn btn-sm btn-outline-info px-4 rounded-pill fw-bold">Login</Link>
@@ -198,6 +191,12 @@ function Navbar() {
                             </div>
                         ) : (
                             <div className="d-flex align-items-center gap-2">
+                              
+                                {isAdmin && (
+                                    <Link to="/admin-dashboard" className="btn btn-sm btn-outline-info px-3 rounded-pill fw-bold">
+                                        <i className="bi bi-speedometer2 me-1"></i> Dashboard
+                                    </Link>
+                                )}
                                 {!isAdmin && (
                                     <Link to="/my-bookings" className="btn btn-sm btn-outline-warning px-3 rounded-pill fw-bold">MyBookings</Link>
                                 )}

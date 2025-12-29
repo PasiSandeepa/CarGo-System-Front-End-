@@ -16,7 +16,7 @@ function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        
+
         localStorage.clear();
         sessionStorage.clear();
 
@@ -33,13 +33,13 @@ function Login() {
             if (res.status === 200) {
                 const userData = res.data;
                 const userToSave = {
-                    id: userData.customerid, 
+                    id: userData.customerid,
                     email: userData.email,
                     firstName: userData.firstName
                 };
 
                 localStorage.setItem('user', JSON.stringify(userToSave));
-                
+
                 Swal.fire({
                     icon: 'success',
                     title: 'Welcome Back!',
@@ -62,8 +62,8 @@ function Login() {
     };
 
     return (
-        <div style={{ 
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+        <div style={{
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             minHeight: '100vh',
             display: 'flex',
             alignItems: 'center',
@@ -73,7 +73,7 @@ function Login() {
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-md-5 col-lg-4">
-                     
+
                         <div className="card shadow-lg border-0 rounded-4 overflow-hidden" style={{ backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.9)' }}>
                             <div className="card-body p-5">
                                 <div className="text-center mb-4">
@@ -126,21 +126,21 @@ function Login() {
 
                                 <div className="mt-4 text-center">
                                     <p className="mb-0 small text-muted">
-                                        Don't have an account? 
+                                        Don't have an account?
                                         <a href="/register" className="ms-1 fw-bold text-primary text-decoration-none">Create One</a>
                                     </p>
                                 </div>
                             </div>
                         </div>
-                    
+
                         <p className="text-center text-white-50 mt-4 small">
                             &copy; 2024 YourBrand. All rights reserved.
                         </p>
                     </div>
                 </div>
             </div>
-            
-        
+
+
             <style>
                 {`
                     .hover-lift:hover {

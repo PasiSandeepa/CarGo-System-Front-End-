@@ -19,7 +19,7 @@ function Booking() {
     const [loading, setLoading] = useState(false);
     const [showMap, setShowMap] = useState(false);
 
-
+    // පාරිභෝගිකයාගේ NIC එක ලබා ගැනීම
     useEffect(() => {
         const fetchCustomerNic = async () => {
             try {
@@ -40,6 +40,7 @@ function Booking() {
         fetchCustomerNic();
     }, [user?.id, user?.customerId]);
 
+    // Car data නොමැති නම් ආපසු හරවා යැවීම
     useEffect(() => {
         if (!car) navigate('/vehicles');
     }, [car, navigate]);
@@ -50,42 +51,45 @@ function Booking() {
             const start = new Date(startDate);
             const end = new Date(endDate);
             const diffTime = end - start;
-         
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
             setTotalPrice(diffDays > 0 ? diffDays * car.pricePerDay : 0);
         }
     }, [startDate, endDate, car]);
 
+
     const handleBookingSubmit = async (e) => {
         e.preventDefault();
-        
-    
-        if (loading) return;
 
+        if (loading) return;
         setLoading(true);
 
         const bookingData = {
-            customerId: user?.id || user?.customerId, 
-            carId: car?.carid || car?.id,             
-            startDate: startDate,                    
-            endDate: endDate,                        
-            totalAmount: totalPrice                  
+            customerId: user?.id || user?.customerId,
+            carId: car?.carid || car?.id,
+            startDate: startDate,
+            endDate: endDate,
+            totalAmount: totalPrice
         };
 
         try {
-       
+        
             const res = await axios.post('http://localhost:8080/api/v1/booking/add', bookingData);
 
             if (res.status === 200 || res.status === 201) {
-            
+              
+                const newBookingId = res.data.bookId;
+
                 Swal.fire({
-                    title: 'Success!',
-                    text: 'Your booking has been confirmed successfully!',
-                    icon: 'success',
-                    confirmButtonColor: '#0d6efd',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    navigate('/vehicles');
+                  
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate('/payment', {
+                            state: {
+                                bookingId: newBookingId, 
+                                amount: totalPrice
+                            }
+                        });
+                    }
                 });
             }
         } catch (err) {
@@ -107,7 +111,7 @@ function Booking() {
             <Navbar />
             <div className="container mt-5 pt-5 pb-5">
                 <div className="row g-4">
-             
+                   
                     <div className="col-lg-5 col-md-12">
                         <div className="card shadow-lg border-0 rounded-4 overflow-hidden">
                             <img
@@ -136,7 +140,6 @@ function Booking() {
                         </div>
                     </div>
 
-                 
                     <div className="col-lg-7 col-md-12">
                         <div className="card shadow-lg p-4 border-0 rounded-4 h-100">
                             <h3 className="fw-bold text-primary mb-4">Confirm Reservation</h3>
@@ -144,22 +147,22 @@ function Booking() {
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
                                         <label className="fw-bold">Pick-up Date</label>
-                                        <input 
-                                            type="date" 
-                                            className="form-control" 
-                                            min={new Date().toISOString().split("T")[0]} 
-                                            onChange={(e) => setStartDate(e.target.value)} 
-                                            required 
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            min={new Date().toISOString().split("T")[0]}
+                                            onChange={(e) => setStartDate(e.target.value)}
+                                            required
                                         />
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <label className="fw-bold">Return Date</label>
-                                        <input 
-                                            type="date" 
-                                            className="form-control" 
-                                            min={startDate || new Date().toISOString().split("T")[0]} 
-                                            onChange={(e) => setEndDate(e.target.value)} 
-                                            required 
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            min={startDate || new Date().toISOString().split("T")[0]}
+                                            onChange={(e) => setEndDate(e.target.value)}
+                                            required
                                         />
                                     </div>
                                 </div>
@@ -185,9 +188,9 @@ function Booking() {
                                     </div>
                                 </div>
 
-                                <button 
-                                    type="submit" 
-                                    className="btn btn-primary w-100 fw-bold py-3 rounded-3 shadow transition-all" 
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary w-100 fw-bold py-3 rounded-3 shadow transition-all"
                                     disabled={loading || totalPrice === 0}
                                 >
                                     {loading ? (
@@ -195,7 +198,7 @@ function Booking() {
                                             <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                                             PROCESSING...
                                         </span>
-                                    ) : 'CONFIRM AND PROCEED'}
+                                    ) : 'CONFIRM AND PAY NOW'}
                                 </button>
                             </form>
                         </div>
